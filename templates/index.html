@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Index page</title>
+</head>
+<body>
+	<h2>Twitter Like App</h2>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			<ul>
+			{% for category, message in messages %}
+				<li class="{{ category }}">{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+	<!-- Login Form -->
+	<form action="/users/login" method="post">
+		<fieldset>
+			<legend>Login User</legend>
+			<input type="hidden" name="action" value="login">
+			<label for="un">Username: </label>
+			<input type="text" name="username" id="un">
+			<label for="password">Password: </label>
+			<input type="password" name="password" id="password">
+			<br>
+			<input type="submit" value="Login">
+		</fieldset>
+	</form>
+	<hr>
+	<!-- Registration Form -->
+	<form action="/users/register" method="post">
+		<fieldset>
+			<legend>Register User</legend>
+			<input type="hidden" name="action" value="register">
+			<label for="name">Username: </label>
+			<input type="text" name="username" id="name">
+			<label for="pw">Password: </label>
+			<input type="password" name="password" id="pw">
+			<br>
+			<input type="submit" value="Register">
+		</fieldset>
+	</form>
+
+</body>
+</html>

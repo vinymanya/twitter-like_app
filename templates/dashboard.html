@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+</head>
+<body>
+	<a href="/logout">Logout</a>
+	<h3>Hi, {{ session.username }}</h3>
+	<h5>Welcome to your Dashboard!</h4>
+	<form action="/create_tweet" method="post">
+		<input type="text" name="new_tweet" placeholder="Type your tweet">
+		<input type="submit" value="Submit">
+	</form>
+
+	<h3>News Feed</h3>
+	{% for tweet in tweets %}
+	<!-- Show tweets from me and other users that have follwed -->
+		{% if tweet.user_id == session["user_id"] or tweet.user_id in leaders %}
+			<div>
+				<h4>Tweeted by {{ tweet["username"] }} on {{ tweet.time_stamp.strftime("%a, %d %b %Y %H:%M") }}</h4>
+				<p>{{ tweet.tweet }} | <a href="/like/{{ tweet.tweet_id }}">Like</a>
+					{% if session["user_id"] not in likes and tweet.tweet_id == likes["tweet_id"] %}
+						<span>{{ my_like  }}</span>
+
+					{% endif %}
+				</p>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<hr>
+	
+	<!-- List of users -->
+	<fieldset>
+        <legend>All Users</legend>
+        <ul>
+        {% for user in users %}
+        	<!-- Don't show neither the user in session nor the users that have follwed -->
+            {% if user.id != session["user_id"] and user.id not in leaders %}         
+            <li>{{user.username}} <a href="/follow/{{user.id}}">Follow</a></li>
+            {% elif user.id != session["user_id"] and user.id in leaders %} <!-- if I have already followed -->
+            <li>{{user.username}} <a href="/unfollow/{{user.id}}">unfollow</a></li>
+            {% endif %}            
+        {% endfor %}
+        </ul>
+    </fieldset>
+
+</body>
+</html>
